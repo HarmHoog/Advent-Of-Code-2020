@@ -36,42 +36,28 @@ val pidRegex = "^[0-9]{9}$".toRegex()
 
 fun checkPassport(passport: Passport) : Boolean {
     if (!pidRegex.matches(passport.pid) || !eclRegex.matches(passport.ecl) ||
-            !hclRegex.matches(passport.hcl)) {
+            !hclRegex.matches(passport.hcl) || !fourDigitRegex.matches(passport.byr) ||
+            !fourDigitRegex.matches(passport.iyr) || !fourDigitRegex.matches(passport.eyr) ||
+            !hgtRegex.matches(passport.hgt)) {
         return false;
     }
 
-    if (fourDigitRegex.matches(passport.byr)) {
-        val byr = passport.byr.toInt()
-        if (byr < 1920 || byr > 2002) return false
-    } else {
-        return false
-    }
+    val byr = passport.byr.toInt()
+    if (byr < 1920 || byr > 2002) return false
 
-    if (fourDigitRegex.matches(passport.iyr)) {
-        val iyr = passport.iyr.toInt()
-        if (iyr < 2010 || iyr > 2020) return false
-    } else {
-        return false
-    }
+    val iyr = passport.iyr.toInt()
+    if (iyr < 2010 || iyr > 2020) return false
 
-    if (fourDigitRegex.matches(passport.eyr)) {
-        val eyr = passport.eyr.toInt()
-        if (eyr < 2020 || eyr > 2030) return false
-    } else {
-        return false
-    }
+    val eyr = passport.eyr.toInt()
+    if (eyr < 2020 || eyr > 2030) return false
 
-    if (hgtRegex.matches(passport.hgt)) {
-        val hgt = passport.hgt
-        if (hgt.contains("in")) {
-            val inValue = hgt.replace("in", "").toInt()
-            if (inValue < 59 || inValue > 76) return false
-        } else {
-            val cmValue = hgt.replace("cm", "").toInt()
-            if (cmValue < 150 || cmValue > 193) return false
-        }
+    val hgt = passport.hgt
+    if (hgt.contains("in")) {
+        val inValue = hgt.replace("in", "").toInt()
+        if (inValue < 59 || inValue > 76) return false
     } else {
-        return false
+        val cmValue = hgt.replace("cm", "").toInt()
+        if (cmValue < 150 || cmValue > 193) return false
     }
 
     return true
